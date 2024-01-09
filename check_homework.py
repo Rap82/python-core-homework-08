@@ -17,6 +17,7 @@ RESET = "\033[0m"
 
 
 class CustomTestResult(unittest.TextTestResult):
+    '''CustomTestResul'''
     def addSuccess(self, test):
         super().addSuccess(test)
         self.stream.write(f"{GREEN} {test.shortDescription()} {RESET}\n")
@@ -29,7 +30,8 @@ class CustomTestResult(unittest.TextTestResult):
     def printErrors(self):
         if self.errors:
             print(
-                f"{RED}Ваш код викликає помилки при виконанні тесту. Перевірте чи ви виконали імпорт 'from datetime import date'{RESET}"
+                f"{RED}Ваш код викликає помилки при виконанні тесту. \
+                    Перевірте чи ви виконали імпорт 'from datetime import date'{RESET}"
             )
             self.printErrorList("ERROR:", self.errors)
         self.stream.write(f"\nВсього пройдено {self.testsRun} тестів.\n")
@@ -46,10 +48,12 @@ class CustomTestResult(unittest.TextTestResult):
 
 
 class CustomTestRunner(unittest.TextTestRunner):
+    '''CustomTestRunner'''
     resultclass = CustomTestResult
 
 
 class TestGetBirthdaysPerWeek(unittest.TestCase):
+    '''TestGetBirthdaysPerWeek'''
     def setUp(self):
         self.today = datetime(2023, 12, 26)
 
@@ -67,7 +71,8 @@ class TestGetBirthdaysPerWeek(unittest.TestCase):
         expected = {}
         assert (
             result == expected
-        ), """1. Провалено тест коли всі дні народження користувачів вже минули у цьому році. Функція повинна повертати пустий словник"""
+        ), """1. Провалено тест коли всі дні народження користувачів вже минули \
+            у цьому році. Функція повинна повертати пустий словник"""
 
     @patch("main.date")
     def test_empty_users(self, date_mock):
@@ -80,12 +85,15 @@ class TestGetBirthdaysPerWeek(unittest.TestCase):
         expected = {}
         assert (
             result == expected
-        ), """2. Провалено тест коли у функцію передали пустий список користувачів. Функція повинна повертати пустий словник"""
+        ), """2. Провалено тест коли у функцію передали пустий список користувачів. \
+            Функція повинна повертати пустий словник"""
 
     @patch("main.date")
     def test_weekend_birthdays(self, date_mock):
         """
-        5. Успішно пройдено тест коли функція повернула правильний список днів народження користувачів, причому деякі припадають на вихідні
+        5. Успішно пройдено тест коли функція повернула \
+            правильний список днів народження користувачів, \
+            причому деякі припадають на вихідні
         """
         date_mock.today.return_value = self.today.date()
         users = [
@@ -103,12 +111,16 @@ class TestGetBirthdaysPerWeek(unittest.TestCase):
         expected = {"Monday": ["John", "Doe"], "Friday": ["Alice"]}
         assert (
             result == expected
-        ), "5. Провалено тест коли дні народження деяких користувачів випадають на вихідні. Функція повернула не правильний словник"
+        ), "5. Провалено тест коли дні народження деяких користувачів випадають на вихідні. \
+            Функція повернула не правильний словник"
 
     @patch("main.date")
     def test_past_birthdays_next_week(self, date_mock):
         """
-        4. Успішно пройдено тест коли функція повернула правильний список днів народження користувачів, де деякі дні народження вже минули в цьому році, але вони будуть на наступному тижні
+        4. Успішно пройдено тест коли функція повернула \
+            правильний список днів народження користувачів,\
+                  де деякі дні народження вже минули в цьому році, \
+                але вони будуть на наступному тижні
         """
         date_mock.today.return_value = self.today.date()
         users = [
@@ -131,12 +143,15 @@ class TestGetBirthdaysPerWeek(unittest.TestCase):
         }
         assert (
             result == expected
-        ), """4. Провалено тест бо функція повернула не правильний список днів народження користувачів, де деякі вже минули в цьому році, але вони будуть на наступному тижні"""
+        ), """4. Провалено тест бо функція повернула не правильний \
+            список днів народження користувачів, \
+            де деякі вже минули в цьому році, але вони будуть на наступному тижні"""
 
     @patch("main.date")
     def test_future_birthdays(self, date_mock):
         """
-        3. Успішно пройдено тест коли функція повернула правильний список днів народження користувачів які не припадають на вихідні
+        3. Успішно пройдено тест коли функція повернула\
+              правильний список днів народження користувачів які не припадають на вихідні
         """
 
         date_mock.today.return_value = self.today.date()
@@ -155,7 +170,9 @@ class TestGetBirthdaysPerWeek(unittest.TestCase):
         expected = {"Wednesday": ["John"], "Friday": ["Doe"]}
         assert (
             result == expected
-        ), """3. Провалено тест бо функція повернула не правильний список днів народження користувачів які є у майбутньому та вони не припадають на вихідні"""
+        ), """3. Провалено тест бо функція повернула не правильний список \
+            днів народження користувачів \
+            які є у майбутньому та вони не припадають на вихідні"""
 
 
 if __name__ == "__main__":
